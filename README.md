@@ -1,6 +1,44 @@
 # smart-trading-gate
 对接gate，全量分析合约交易对，专注做空信号的触发，并自动开仓平仓的交易系统
 包含两个项目，一个做数据抓取，分析，自动交易；一个作为资讯网站，分享交易数据。
+核心策略 - 空单盈利的底层量化支撑
+价值回归·风险缓冲·资金可控，构建空单交易策略逻辑参考
+
+三大核心量化支撑
+作为聚焦空单盈利的垂直领域标杆平台，我们的底层逻辑基于三大核心量化支撑：
+
+价值回归逻辑：虚拟货币与传统金融市场存在资金分流竞争，新币持续发行且多数缺乏实体盈利支撑，长期来看，无价值支撑的资产必然走向价值回归，为空头策略提供底层逻辑支撑。
+大白话，大部分币最终一路下跌走向下架。
+风险缓冲机制：价格短期上涨时点与峰值难以精准预判，但资产合理估值区间具备可量化性。在价格阶段性冲高突破估值区间后布局空单，借助估值修复逻辑构建天然风险缓冲，提升交易胜率。
+大白话，已经涨了这么多，再涨还能涨多少，怎么地也得回调至少给个跑路的机会。
+资金安全可控：资产价格遵循周期性波动规律，新币长期下行趋势明确前提下，通过科学资金配置，可将短期浮动亏损控制在安全阈值内，杜绝爆仓风险，随着时间周期推进实现收益回归；极端行情下，支持智能止损与手动平仓双向选择，优化资金利用率。
+大白话，最终还是看谁资金多
+空单触发核心策略
+空单触发核心策略：当15分钟K线收盘价或最高价突破预设涨幅阈值时，系统自动启动多维度量化分析模型，追踪4小时周期内价格波动特征、成交量变化、资金流向等核心指标，通过参数矩阵比对与概率模型计算，生成高胜率空单交易信号，同步推送至用户终端。
+
+核心策略优势
+🎯
+逻辑底层稳固：基于市场本质规律与资产估值逻辑，而非短期情绪炒作，策略具备长期有效性与可验证性。
+🛡️
+风险可控性高：通过估值区间界定与资金配置策略，从源头控制交易风险，杜绝极端亏损。
+⚡
+信号触发精准：多维度量化模型结合分钟级行情数据，确保空单信号触发的及时性与准确性。
+# 联系方式
+Telegram：@tomas99999999999
+
+<img width="200" height="200" alt="tg (1)" src="https://github.com/user-attachments/assets/25c300d1-38e7-4c37-9df6-0092b917a08c" />
+
+# 项目运行情况
+<img width="1387" height="843" alt="图片1" src="https://github.com/user-attachments/assets/6dfbadf2-980f-4b48-b22d-09c13c5b3549" />
+<img width="1210" height="707" alt="图片3" src="https://github.com/user-attachments/assets/45943b11-d693-4066-9646-0740605a3e58" />
+<img width="1237" height="847" alt="图片2" src="https://github.com/user-attachments/assets/3720be78-18a1-4281-9c61-bb61d64436c0" />
+<img width="1683" height="725" alt="图片8" src="https://github.com/user-attachments/assets/fe03631e-9b2a-4fd0-b5ed-fac7ffb90bed" />
+<img width="1104" height="843" alt="图片7" src="https://github.com/user-attachments/assets/452fdaf6-feb0-4de1-af86-f115ae697473" />
+<img width="1229" height="463" alt="图片6" src="https://github.com/user-attachments/assets/e62259e2-8975-4b9c-9191-8caa8079fbe5" />
+<img width="1220" height="519" alt="图片5" src="https://github.com/user-attachments/assets/71cfcafe-ee12-415d-8734-ab3c8d1d927c" />
+<img width="1173" height="743" alt="图片4" src="https://github.com/user-attachments/assets/42d59f94-61fc-4d38-9a2a-b482df7d297d" />
+
+
 # trading-data-Aanalizer 架构与部署文档
 
 > 项目代号：`tradingdata-gate`（Maven artifactId: `tradingdata`）

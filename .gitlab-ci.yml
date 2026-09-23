@@ -1,0 +1,61 @@
+# trading-web GitLab CI 流水线
+# 流程：build(打包验证) -> docker(构建并推送镜像到 GitLab Container Registry)
+#
+# 前置条件：
+#   1. GitLab 仓库已开启 Container Registry（Settings -> General -> Visibility -> Container Registry）。
+#   2. Runner 支持 docker executor（Kaniko 无需 privileged / docker-in-dind，普通 docker runner 即可）。
+#   3. CI_REGISTRY / CI_REGISTRY_USER / CI_REGISTRY_PASSWORD 由 GitLab 自动注入。
+
+stages:
+  - build
+  - docker
+
+variables:
+  MAVEN_OPTS: "-Dmaven.repo.local=.m2/repository"
+  MAVEN_CLI_OPTS: "-B -DskipTests"
+
+# 跨流水线复用 Maven 依赖（key 跟 pom 变化刷新）
+cache:
+  key:
+    files:
+      - pom.xml
+  paths:
+    - .m2/repository
+
+# 1. 打包验证（快失败反馈 + 产出 jar 制品供裸跑部署）
+build:jar:
+  stage: build
+  image: maven:3.9-eclipse-temurin-21
+  script:
+    - mvn $MAVEN_CLI_OPTS package
+  artifacts:
+    paths:
+      - target/*.jar
+    expire_in: 3 days
+
+# 2. 构建 Docker 镜像并推送 GitLab Container Registry（Kaniko）
+build:image:
+  stage: docker
+  image:
+    name: gcr.io/kaniko-project/executor:debug
+    entrypoint: [""]
+  script:
+    - mkdir -p /kaniko/.docker
+    # 使用 CI 内置变量写 Docker 认证，无需额外配置 secret
+    - >-
+      echo
+      "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"}}}"
+      > /kaniko/.docker/config.json
+    - >-
+      /kaniko/executor
+      --context "${CI_PROJECT_DIR}"
+      --dockerfile "${CI_PROJECT_DIR}/Dockerfile"
+      --destination "${CI_REGISTRY_IMAGE}:${CI_COMMIT_SHORT_SHA}"
+      --destination "${CI_REGISTRY_IMAGE}:${CI_COMMIT_REF_SLUG}"
+      --destination "${CI_REGISTRY_IMAGE}:latest"
+      --cache=true
+      --cache-repo "${CI_REGISTRY_IMAGE}/cache"
+  # 仅在默认分支与 tag 上推送镜像；其他分支只跑 build:jar
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main" || $CI_COMMIT_BRANCH == "master"
+    - if: $CI_COMMIT_TAG
